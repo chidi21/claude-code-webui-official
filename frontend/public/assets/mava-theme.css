@@ -1,0 +1,1104 @@
+/* MAVA Light Mode Theme for Claude Code WebUI */
+/* Matches the .light class from realtime-multi-agent/mava-frontend */
+
+/* ============================================
+   FONTS - oso-sans from Adobe Typekit
+   ============================================ */
+
+body {
+  font-family: "oso-sans", "Inter", system-ui, sans-serif !important;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   MAVA CHAT BUBBLE STYLES
+   ============================================ */
+
+/* User message bubble - MAVA banana accent background */
+.mava-user-bubble {
+  background: linear-gradient(135deg, var(--banana-400), var(--banana-500)) !important;
+  border: 1px solid var(--banana-600) !important;
+  color: var(--chimp-900) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Assistant message bubble - transparent with no border */
+.mava-assistant-bubble {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--foreground) !important;
+}
+
+/* Text styles */
+.mava-text {
+  color: var(--foreground) !important;
+  font-family: "oso-sans", "Inter", system-ui, sans-serif !important;
+}
+
+.mava-accent-text {
+  color: var(--accent-primary) !important;
+}
+
+/* User avatar - MAVA logo */
+.mava-user-avatar {
+  background-color: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+/* ============================================
+   HEADER LOGO AND TITLE
+   ============================================ */
+
+/* Hide original text and replace with "Claude Code" */
+button[aria-label="Back to project selection"] {
+  font-size: 0 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+button[aria-label="Back to project selection"]::after {
+  display: flex !important;
+  align-items: center !important;
+  margin-top: -4px;
+}
+
+/* Remove background from header/nav breadcrumb area */
+nav[aria-label="Breadcrumb"],
+nav[aria-label="Breadcrumb"] > div,
+nav[aria-label="Breadcrumb"] div,
+.flex.items-center.justify-between,
+.flex.items-center.gap-4,
+.flex.items-center.gap-4 > div {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+button[aria-label="Back to project selection"]::after {
+  content: "Claude Code";
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--foreground);
+  letter-spacing: -0.025em;
+}
+
+/* Responsive - smaller on mobile */
+@media (max-width: 640px) {
+  button[aria-label="Back to project selection"]::after {
+    font-size: 1.25rem;
+  }
+
+  /* Hide breadcrumb separator and secondary title on small screens */
+  nav[aria-label="Breadcrumb"] span[aria-hidden="true"],
+  nav[aria-label="Breadcrumb"] h1[aria-current="page"] {
+    display: none !important;
+  }
+
+  /* Ensure breadcrumb container doesn't wrap */
+  nav[aria-label="Breadcrumb"] > div {
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+  }
+
+  /* Make the working directory path smaller and wrap nicely */
+  nav[aria-label="Breadcrumb"] + div,
+  .font-mono {
+    font-size: 0.7rem !important;
+    word-break: break-all !important;
+  }
+
+  /* Hide session ID on very small screens */
+  nav[aria-label="Breadcrumb"] + div span.ml-2 {
+    display: none !important;
+  }
+}
+
+/* Medium screens - show abbreviated text */
+@media (min-width: 641px) and (max-width: 900px) {
+  button[aria-label="Back to project selection"]::after {
+    font-size: 1.5rem;
+  }
+
+  /* Slightly smaller breadcrumb text */
+  nav[aria-label="Breadcrumb"] h1[aria-current="page"],
+  nav[aria-label="Breadcrumb"] span[aria-hidden="true"] {
+    font-size: 1.25rem !important;
+  }
+}
+
+:root {
+  /* Light mode colors - matching mava-frontend globals.css */
+  --background: rgb(225 222 210);
+  --foreground: #1a1a1a;
+  --header-bg: rgb(226 218 200);
+  --border-color: rgba(0, 0, 0, 0.15);
+  --card-bg: #fcfcf0;
+  --sidebar-bg: #ddcbba;
+  --panel-bg: rgb(235 229 215 / 50%);
+  --muted-text: #4a4a4a;
+  --accent-text: #000000;
+  --scrollbar-thumb: #d5cdc5;
+  --scrollbar-thumb-hover: #c5bdb5;
+  --selection-bg: rgba(211, 178, 151, 0.4);
+  --accent-primary: #8b6d56;
+  --status-success: #5d7a5d;
+  --status-success-bg: rgba(93, 122, 93, 0.1);
+  --status-success-border: rgba(93, 122, 93, 0.25);
+  --status-warning: #854d0e;
+  --status-warning-bg: rgba(133, 77, 14, 0.15);
+  --status-error: #991b1b;
+  --status-info: #174ea6;
+  --status-purple: #6b21a8;
+  --canvas-bg: rgb(225 222 210);
+  --content-bg: #eee9da;
+  --heading-text: #5d4d42;
+
+  /* Banana accent colors */
+  --banana-400: #e0c4ad;
+  --banana-500: #d3b297;
+  --banana-600: #c19d7e;
+
+  /* Chimp neutral scale */
+  --chimp-900: #1a1a1a;
+  --chimp-800: #242424;
+  --chimp-700: #2e2e2e;
+  --chimp-600: #3a3a3a;
+  --chimp-500: #525252;
+  --chimp-400: #6b6b6b;
+  --chimp-300: #a3a3a3;
+  --chimp-200: #d4d4d4;
+  --chimp-100: #f5f5f5;
+
+  color-scheme: light dark;
+}
+
+/* Main background */
+body {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+
+.bg-slate-900,
+.bg-slate-800 {
+  background-color: var(--background) !important;
+}
+
+/* Header styling */
+header,
+nav {
+  background-color: var(--header-bg) !important;
+  border-color: var(--border-color) !important;
+  backdrop-filter: blur(12px);
+}
+
+/* Card and panel backgrounds */
+.bg-white,
+.bg-white\/80,
+.bg-white\/70,
+.bg-slate-50,
+.bg-slate-100 {
+  background-color: var(--card-bg) !important;
+}
+
+/* Message containers - content background */
+.rounded-2xl,
+.rounded-xl:not(#theme-toggle-btn) {
+  background-color: var(--content-bg) !important;
+  border-color: transparent !important;
+}
+
+/* Theme toggle button */
+#theme-toggle-btn.rounded-xl {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: var(--border-color) !important;
+  padding: 6px !important;
+}
+
+#theme-toggle-btn.rounded-xl:hover {
+  background-color: rgb(255, 255, 255) !important;
+}
+
+/* Header buttons (theme toggle, settings, history) - reduced padding */
+header button.rounded-xl,
+nav button.rounded-xl,
+.flex.items-center.gap-4 button.rounded-xl,
+button[aria-label="Open settings"],
+button[aria-label="Toggle theme"],
+button[aria-label="View conversation history"] {
+  padding: 6px !important;
+}
+
+/* Assistant message bubbles - light pale blue */
+.bg-slate-200,
+.bg-slate-100,
+.bg-slate-800\/80,
+.bg-slate-700\/50,
+.bg-white\/80,
+div[class*="bg-slate-200"],
+div[class*="bg-slate-100"],
+div[class*="bg-slate-800"],
+div[class*="bg-slate-700"],
+div[class*="bg-white/80"],
+[class*="bg-slate-200"],
+[class*="bg-slate-100"] {
+  background-color: #f0f5fa !important;
+}
+
+/* Claude chat bubble container - specific targeting */
+.rounded-lg.bg-slate-200,
+.rounded-lg[class*="bg-slate-200"],
+div.rounded-lg.bg-slate-200,
+div[class*="rounded-lg"][class*="bg-slate-200"],
+div[class*="max-w"][class*="rounded-lg"][class*="bg-slate"] {
+  background-color: #f3ece3 !important;
+  border: 1px solid rgba(200, 185, 170, 0.35) !important;
+}
+
+/* Pre/code inside Claude chat bubble - transparent to match container */
+.rounded-lg.bg-slate-200 pre,
+.rounded-lg.bg-slate-200 code,
+div[class*="rounded-lg"][class*="bg-slate-200"] pre,
+div[class*="rounded-lg"][class*="bg-slate-200"] code,
+div[class*="max-w"][class*="rounded-lg"][class*="bg-slate"] pre,
+div[class*="max-w"][class*="rounded-lg"][class*="bg-slate"] code {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+/* Panel backgrounds */
+aside,
+[class*="sidebar"] {
+  background-color: var(--sidebar-bg) !important;
+}
+
+/* Input fields */
+textarea,
+input {
+  background-color: #f3ece3 !important;
+  border-color: rgba(200, 185, 170, 0.35) !important;
+  color: var(--foreground) !important;
+}
+
+/* ============================================
+   CHAT INPUT - MAVA STYLE
+   ============================================ */
+
+/* Chat input textarea - match MAVA size */
+form textarea,
+.flex-shrink-0 textarea {
+  min-height: 130px !important;
+  max-height: 200px !important;
+  padding: 12px 80px 12px 16px !important;
+  border-radius: 16px !important;
+  background-color: var(--header-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  font-family: "oso-sans", "Inter", system-ui, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  resize: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Chat input container styling */
+.flex-shrink-0 form {
+  position: relative;
+}
+
+/* Send button - MAVA banana gradient */
+form button[type="submit"],
+.flex-shrink-0 button[type="submit"] {
+  background: linear-gradient(to bottom, var(--banana-400), var(--banana-600)) !important;
+  color: var(--chimp-900) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 8px 16px !important;
+  font-weight: 500 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+form button[type="submit"]:hover:not(:disabled),
+.flex-shrink-0 button[type="submit"]:hover:not(:disabled) {
+  background: linear-gradient(to bottom, var(--banana-400), var(--banana-500)) !important;
+}
+
+form button[type="submit"]:disabled,
+.flex-shrink-0 button[type="submit"]:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Placeholder styling */
+textarea::placeholder,
+input::placeholder {
+  color: var(--muted-text) !important;
+}
+
+/* Text colors */
+.text-slate-900,
+.text-slate-800,
+.text-slate-700 {
+  color: var(--foreground) !important;
+}
+
+.text-slate-500,
+.text-slate-600 {
+  color: var(--muted-text) !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading-text) !important;
+}
+
+/* Primary buttons - Banana gradient style (NOT user messages) */
+button[type="submit"] {
+  background: linear-gradient(to bottom, var(--banana-400), var(--banana-600)) !important;
+  color: var(--chimp-900) !important;
+  border: none !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+button[type="submit"]:hover {
+  background: linear-gradient(to bottom, var(--banana-400), var(--banana-500)) !important;
+}
+
+/* User message bubbles - bg-blue-600 */
+.bg-blue-600,
+.bg-blue-500,
+.bg-blue-700,
+.dark .dark\:bg-blue-600,
+.dark .dark\:bg-blue-500,
+.dark .dark\:bg-blue-700,
+[class*="bg-blue-6"],
+[class*="bg-blue-5"],
+[class*="bg-blue-7"] {
+  background-color: var(--sidebar-bg) !important;
+  color: var(--chimp-900) !important;
+  box-shadow: none !important;
+}
+
+/* User message text colors */
+.bg-blue-600 .text-blue-100,
+.bg-blue-600 .text-blue-200,
+.bg-blue-600.text-white,
+.bg-blue-600 .opacity-90,
+.bg-blue-600 .opacity-70,
+[class*="bg-blue-6"] .text-blue-100,
+[class*="bg-blue-6"] .text-blue-200,
+[class*="bg-blue-6"] span {
+  color: var(--foreground) !important;
+}
+
+/* User message bubble - styled background */
+.rounded-lg.bg-blue-600.text-white,
+[class*="max-w"][class*="bg-blue-600"],
+div.bg-blue-600.text-white {
+  background-color: var(--sidebar-bg) !important;
+  color: var(--foreground) !important;
+  border: none !important;
+}
+
+/* User message pre/code text - transparent inside bubble */
+.bg-blue-600 pre,
+.bg-blue-600 code,
+div.bg-blue-600.text-white pre,
+div.bg-blue-600.text-white code {
+  background-color: transparent !important;
+  color: var(--foreground) !important;
+}
+
+/* Secondary buttons */
+.bg-slate-200,
+.bg-slate-100,
+.dark .dark\:bg-slate-700,
+.dark .dark\:bg-slate-600 {
+  background-color: var(--header-bg) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Links */
+a,
+.text-blue-600,
+.text-blue-500,
+.dark .dark\:text-blue-400,
+.dark .dark\:text-blue-300 {
+  color: var(--accent-primary) !important;
+}
+
+a:hover {
+  color: var(--banana-600) !important;
+}
+
+/* Code blocks */
+pre,
+code,
+.font-mono {
+  background-color: var(--content-bg) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark pre,
+.dark code {
+  background-color: var(--content-bg) !important;
+  color: var(--foreground) !important;
+}
+
+/* Status colors - emerald/green toned down */
+.bg-green-500,
+.bg-emerald-500,
+.bg-emerald-400,
+.dark .dark\:bg-green-700,
+.dark .dark\:bg-emerald-600,
+.dark .dark\:bg-emerald-500 {
+  background-color: var(--status-success) !important;
+}
+
+.bg-green-100,
+.bg-green-50,
+.bg-emerald-100,
+.bg-emerald-50,
+.bg-emerald-50\/80,
+.dark .dark\:bg-green-900\/20,
+.dark .dark\:bg-emerald-900\/20 {
+  background-color: var(--status-success-bg) !important;
+}
+
+.text-green-700,
+.text-green-800,
+.text-emerald-700,
+.text-emerald-800,
+.dark .dark\:text-green-400,
+.dark .dark\:text-green-300,
+.dark .dark\:text-emerald-400,
+.dark .dark\:text-emerald-300 {
+  color: var(--status-success) !important;
+}
+
+/* Emerald borders - muted */
+.border-emerald-200,
+.border-emerald-300,
+.border-emerald-700,
+.border-emerald-800,
+.border-green-200,
+.border-green-300,
+.dark .dark\:border-emerald-700,
+.dark .dark\:border-emerald-800 {
+  border-color: var(--status-success-border) !important;
+}
+
+.bg-red-100,
+.dark .dark\:bg-red-900\/20 {
+  background-color: rgba(153, 27, 27, 0.15) !important;
+}
+
+.text-red-600,
+.text-red-500,
+.dark .dark\:text-red-400 {
+  color: var(--status-error) !important;
+}
+
+.bg-amber-50,
+.bg-amber-100,
+.bg-yellow-100,
+.dark .dark\:bg-amber-900\/20,
+.dark .dark\:bg-yellow-900\/20 {
+  background-color: var(--status-warning-bg) !important;
+}
+
+.text-amber-700,
+.text-amber-600,
+.text-yellow-700,
+.dark .dark\:text-amber-400,
+.dark .dark\:text-yellow-400 {
+  color: var(--status-warning) !important;
+}
+
+.text-blue-700,
+.dark .dark\:text-blue-400 {
+  color: var(--status-info) !important;
+}
+
+.text-purple-700,
+.dark .dark\:text-purple-400 {
+  color: var(--status-purple) !important;
+}
+
+/* Purple/Violet borders - darker for Claude's Reasoning bubble */
+.border-purple-200,
+.border-purple-300,
+.border-purple-400,
+.border-purple-500,
+.border-purple-700,
+.border-purple-800,
+.border-violet-200,
+.border-violet-300,
+.border-violet-400,
+.border-violet-500,
+.border-violet-700,
+.border-violet-800,
+.dark .dark\:border-purple-700,
+.dark .dark\:border-purple-800,
+.dark .dark\:border-violet-700,
+.dark .dark\:border-violet-800,
+[class*="border-purple"],
+[class*="border-violet"] {
+  border-color: #6b21a8 !important;
+}
+
+/* Purple/Violet background for thinking bubble */
+.bg-purple-50,
+.bg-purple-100,
+.bg-violet-50,
+.bg-violet-100,
+.dark .dark\:bg-purple-900\/20,
+.dark .dark\:bg-violet-900\/20 {
+  background-color: rgba(107, 33, 168, 0.1) !important;
+}
+
+/* Borders */
+.border-slate-200,
+.border-slate-300,
+.dark .dark\:border-slate-600,
+.dark .dark\:border-slate-700,
+[class*="border-b"],
+[class*="border-t"] {
+  border-color: var(--border-color) !important;
+}
+
+/* Shadows - softer for light mode */
+.shadow-sm,
+.shadow,
+.shadow-md,
+.shadow-lg,
+.shadow-xl {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+/* Selection color */
+::selection {
+  background: var(--selection-bg);
+  color: inherit;
+}
+
+/* Focus rings - warm accent */
+:where(a, button, input, select, summary):focus-visible {
+  outline: 2px solid rgba(211, 178, 151, 0.45) !important;
+  outline-offset: 2px;
+}
+
+.focus\:ring-blue-500:focus,
+.ring-blue-300 {
+  --tw-ring-color: var(--banana-500) !important;
+}
+
+/* Chat input focus state - subtle border */
+textarea:focus,
+textarea:focus-visible,
+input:focus,
+input:focus-visible {
+  outline: 1.5px solid rgba(180, 160, 140, 0.4) !important;
+  border-color: rgba(180, 160, 140, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(211, 178, 151, 0.15) !important;
+}
+
+/* Override any dark ring colors */
+[class*="ring-"],
+[class*="focus:ring"],
+.ring-1,
+.ring-2 {
+  --tw-ring-color: rgba(180, 160, 140, 0.3) !important;
+}
+
+/* Focused container around input */
+[class*="focus-within"]:focus-within,
+div:has(textarea:focus),
+div:has(input:focus) {
+  border-color: rgba(180, 160, 140, 0.4) !important;
+  box-shadow: 0 0 0 2px rgba(211, 178, 151, 0.15) !important;
+}
+
+/* Spinners and loading states */
+.animate-spin {
+  border-top-color: var(--accent-primary) !important;
+}
+
+/* ============================================
+   TOOL CALLS AND MESSAGE BUBBLES
+   ============================================ */
+
+/* Tool call headers & user message bubbles */
+[class*="bg-gray-800"],
+[class*="bg-gray-900"],
+[class*="bg-zinc-800"],
+[class*="bg-zinc-900"],
+[class*="bg-neutral-800"],
+[class*="bg-neutral-900"] {
+  background-color: var(--sidebar-bg) !important;
+  color: var(--foreground) !important;
+}
+
+/* Tool result status bars (green bars) */
+[class*="bg-green-600"],
+[class*="bg-green-700"],
+[class*="bg-emerald-600"],
+[class*="bg-emerald-700"],
+[class*="bg-teal-600"],
+[class*="bg-teal-700"] {
+  background-color: var(--banana-500) !important;
+  color: var(--chimp-900) !important;
+}
+
+/* User message bubbles */
+[class*="bg-teal"],
+[class*="bg-cyan"],
+.bg-teal-500,
+.bg-teal-600,
+.bg-teal-700,
+.bg-teal-800,
+.bg-teal-900,
+.bg-cyan-500,
+.bg-cyan-600,
+.bg-cyan-700,
+.bg-cyan-800,
+.bg-cyan-900 {
+  background-color: var(--banana-500) !important;
+  color: var(--chimp-900) !important;
+}
+
+/* ============================================
+   TEXT WRAPPING FIX FOR ALL CHAT BUBBLES
+   ============================================ */
+
+/* Fix text overflow in ALL message bubbles */
+[class*="bg-teal"],
+[class*="bg-cyan"],
+[class*="bg-blue-6"],
+[class*="bg-blue-5"],
+[class*="bg-slate"],
+[class*="bg-gray"],
+[class*="bg-zinc"],
+[class*="bg-neutral"],
+[class*="rounded-2xl"],
+[class*="rounded-xl"],
+[class*="rounded-lg"],
+.bg-blue-600,
+.bg-blue-500,
+.bg-teal-500,
+.bg-teal-600,
+.bg-teal-700,
+.bg-teal-800,
+div.bg-blue-600.text-white,
+.bg-slate-800,
+.bg-slate-700,
+.bg-slate-800\/80,
+.bg-slate-700\/50,
+.bg-white\/80,
+.dark .dark\:bg-slate-800,
+.dark .dark\:bg-slate-700 {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* Ensure text content inside ALL bubbles wraps */
+[class*="bg-teal"] *,
+[class*="bg-cyan"] *,
+[class*="bg-blue-6"] *,
+[class*="bg-blue-5"] *,
+[class*="bg-slate"] *,
+[class*="bg-gray"] *,
+[class*="bg-zinc"] *,
+[class*="rounded-2xl"] *,
+[class*="rounded-xl"] *,
+[class*="rounded-lg"] *,
+.bg-blue-600 *,
+.bg-teal-500 *,
+.bg-teal-600 *,
+.bg-slate-800 *,
+.bg-slate-700 * {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* Handle pre/code blocks within ALL messages */
+[class*="bg-teal"] pre,
+[class*="bg-teal"] code,
+[class*="bg-cyan"] pre,
+[class*="bg-cyan"] code,
+[class*="bg-blue-6"] pre,
+[class*="bg-blue-6"] code,
+[class*="bg-slate"] pre,
+[class*="bg-slate"] code,
+[class*="bg-gray"] pre,
+[class*="bg-gray"] code,
+[class*="rounded-2xl"] pre,
+[class*="rounded-2xl"] code,
+[class*="rounded-xl"] pre,
+[class*="rounded-xl"] code,
+.bg-blue-600 pre,
+.bg-blue-600 code,
+.bg-slate-800 pre,
+.bg-slate-800 code {
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Tool call containers and file paths */
+[class*="font-mono"],
+.font-mono,
+[class*="monospace"] {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-all !important;
+  max-width: 100% !important;
+}
+
+/* Assistant message containers */
+.prose,
+.prose *,
+[class*="prose"] *,
+article,
+article * {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* Global text container fix */
+div[class*="max-w"],
+div[class*="w-full"],
+p,
+span {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+}
+
+/* ============================================
+   TOOL CALL RESULT BOXES FIX
+   ============================================ */
+
+/* Remove any strikethrough styling */
+[class*="line-through"],
+.line-through,
+del,
+s,
+strike {
+  text-decoration: none !important;
+}
+
+/* Tool call result containers - comprehensive fix */
+[class*="border"][class*="rounded"],
+[class*="border-l"],
+[class*="border-emerald"],
+[class*="border-green"],
+[class*="bg-emerald"],
+[class*="bg-green"] {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  text-decoration: none !important;
+}
+
+/* Tool name and status text */
+[class*="border"][class*="rounded"] span,
+[class*="border"][class*="rounded"] div,
+[class*="border"][class*="rounded"] p,
+[class*="border-l"] span,
+[class*="border-l"] div,
+[class*="border-emerald"] span,
+[class*="border-green"] span {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-all !important;
+  text-decoration: none !important;
+  max-width: 100% !important;
+}
+
+/* Collapsed/expandable tool results */
+details,
+summary,
+details *,
+summary * {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  text-decoration: none !important;
+  max-width: 100% !important;
+}
+
+/* Tool call icon + text containers */
+[class*="flex"][class*="items-center"],
+[class*="flex"][class*="gap"] {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+[class*="flex"][class*="items-center"] span,
+[class*="flex"][class*="gap"] span {
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+  text-decoration: none !important;
+}
+
+/* Ensure all text in tool areas has no strikethrough */
+[class*="text-emerald"],
+[class*="text-green"],
+[class*="text-slate"],
+[class*="text-gray"] {
+  text-decoration: none !important;
+}
+
+/* Fix truncation - allow wrapping instead */
+[class*="truncate"],
+.truncate {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* Session history cards - show full session ID */
+[class*="cursor-pointer"][class*="rounded"][class*="border"],
+div[class*="hover:bg"] {
+  overflow: visible !important;
+}
+
+[class*="cursor-pointer"][class*="rounded"][class*="border"] span,
+[class*="cursor-pointer"][class*="rounded"][class*="border"] div {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  word-break: break-all !important;
+}
+
+/* ============================================
+   TOOL RESULT EMERALD BOX - SCROLLBAR FIX
+   ============================================ */
+
+/* Target the specific emerald tool result container */
+.bg-emerald-50\/80,
+.dark\:bg-emerald-900\/20,
+[class*="bg-emerald-50"],
+[class*="bg-emerald-900"] {
+  overflow: hidden !important;
+  max-width: 100% !important;
+  padding: 12px 12px 16px 12px !important;
+  min-height: 44px !important;
+}
+
+/* The inner flex container with tool name */
+.bg-emerald-50\/80 > div,
+[class*="bg-emerald-50"] > div,
+[class*="bg-emerald-900"] > div,
+.text-emerald-800,
+.dark\:text-emerald-300,
+[class*="text-emerald"] {
+  flex-wrap: wrap !important;
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+  max-width: 100% !important;
+  padding-bottom: 4px !important;
+  line-height: 1.5 !important;
+}
+
+/* Tool name span specifically */
+.text-emerald-800 span,
+.dark\:text-emerald-300 span,
+[class*="text-emerald"] span,
+[class*="bg-emerald"] span {
+  overflow-wrap: break-word !important;
+  word-break: break-all !important;
+  max-width: 100% !important;
+  display: inline-block !important;
+  margin-bottom: 2px !important;
+}
+
+/* User bubble header (darker part with "User" label) */
+[class*="bg-teal-600"],
+[class*="bg-teal-700"],
+[class*="bg-teal-800"],
+[class*="bg-teal-900"],
+[class*="bg-cyan-600"],
+[class*="bg-cyan-700"],
+[class*="bg-cyan-800"],
+[class*="bg-cyan-900"] {
+  background-color: var(--banana-600) !important;
+  color: var(--chimp-900) !important;
+}
+
+/* Force all teal text to dark */
+[class*="text-teal"],
+[class*="text-cyan"],
+.text-teal-100,
+.text-teal-200,
+.text-teal-300,
+.text-teal-50 {
+  color: var(--chimp-900) !important;
+}
+
+/* Tool invocation containers */
+[class*="rounded"][class*="bg-slate"],
+[class*="rounded"][class*="bg-gray"],
+[class*="rounded"][class*="bg-zinc"] {
+  background-color: var(--content-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* Any remaining dark backgrounds in chat */
+div[class*="dark:bg-"],
+span[class*="dark:bg-"] {
+  background-color: var(--content-bg) !important;
+}
+
+/* Fix any black/very dark text containers */
+[style*="background-color: rgb(30"],
+[style*="background-color: rgb(31"],
+[style*="background-color: rgb(32"],
+[style*="background-color: rgb(33"],
+[style*="background-color: rgb(34"],
+[style*="background-color: rgb(35"],
+[style*="background-color: rgb(36"],
+[style*="background-color: rgb(37"],
+[style*="background-color: rgb(38"],
+[style*="background-color: rgb(39"],
+[style*="background-color: rgb(40"],
+[style*="background-color: rgb(41"],
+[style*="background-color: rgb(42"],
+[style*="background-color: rgb(43"],
+[style*="background-color: rgb(44"],
+[style*="background-color: rgb(45"],
+[style*="background-color: #1"],
+[style*="background-color: #2"],
+[style*="background-color: #3"] {
+  background-color: var(--sidebar-bg) !important;
+  color: var(--foreground) !important;
+}
+
+/* Override any inline teal/green backgrounds */
+[style*="background-color: rgb(13"],
+[style*="background-color: rgb(14"],
+[style*="background-color: rgb(15"],
+[style*="background-color: rgb(17"],
+[style*="background-color: rgb(19"],
+[style*="background-color: rgb(20"],
+[style*="background-color: rgb(22"],
+[style*="background-color: rgb(6,"],
+[style*="background-color: rgb(4,"],
+[style*="background-color: rgb(5,"],
+[style*="background-color: rgb(8,"],
+[style*="background-color: #0d"],
+[style*="background-color: #14"],
+[style*="background-color: #0f"],
+[style*="background-color: #06"],
+[style*="background: rgb(13"],
+[style*="background: rgb(14"],
+[style*="background: rgb(15"],
+[style*="background: rgb(17"],
+[style*="background: rgb(19"],
+[style*="background: rgb(20"],
+[style*="background: #0d"],
+[style*="background: #14"],
+[style*="background: #0f"] {
+  background-color: var(--banana-500) !important;
+  color: var(--chimp-900) !important;
+}
+
+/* Additional teal hex values */
+[style*="#0d9488"],
+[style*="#14b8a6"],
+[style*="#0f766e"],
+[style*="#115e59"],
+[style*="#134e4a"],
+[style*="#042f2e"],
+[style*="rgb(13, 148, 136)"],
+[style*="rgb(20, 184, 166)"],
+[style*="rgb(15, 118, 110)"],
+[style*="rgb(17, 94, 89)"],
+[style*="rgb(19, 78, 74)"] {
+  background-color: var(--banana-500) !important;
+  color: var(--chimp-900) !important;
+}
+
+/* Checkbox/icon success states - keep subtle */
+.text-green-500,
+.text-emerald-500,
+svg[class*="text-green"],
+svg[class*="text-emerald"] {
+  color: var(--status-success) !important;
+}
+
+/* Smooth transitions */
+body,
+header,
+aside,
+div,
+button,
+a,
+span {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode is handled by Tailwind's default dark: classes */
+
+/* N8N Session Highlight - 772b3f87 */
+.n8n-highlight {
+  background: linear-gradient(135deg, #d4a574, #c19d7e) !important;
+  border: 2px solid #8b6d56 !important;
+  box-shadow: 0 2px 8px rgba(139, 109, 86, 0.3) !important;
+  position: relative !important;
+}
+.n8n-highlight::after {
+  content: "N8N";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #8b6d56;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+}

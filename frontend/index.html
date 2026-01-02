@@ -5,30 +5,164 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Claude Code Web UI</title>
+    <!-- MAVA Fonts - Adobe Typekit -->
+    <link rel="preconnect" href="https://use.typekit.net" />
+    <link rel="preconnect" href="https://p.typekit.net" />
+    <link rel="preload" href="https://use.typekit.net/utu5ipa.css" as="style" />
+    <link rel="stylesheet" href="https://use.typekit.net/utu5ipa.css" />
     <script>
-      // Prevent flash of unstyled content by setting theme class early
+      // Theme initialization and switching
       (function () {
         const storedTheme = localStorage.getItem("claude-code-webui-theme");
         let theme = null;
         try {
           theme = storedTheme ? JSON.parse(storedTheme) : null;
         } catch {
-          // If parsing fails, fall back to null
           theme = null;
         }
-        
-        if (
-          theme === "dark" ||
-          (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ) {
+
+        const isDark = theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+        if (isDark) {
           document.documentElement.classList.add("dark");
         } else {
           document.documentElement.classList.remove("dark");
         }
+
+        // Inject the correct theme stylesheet
+        const themeLink = document.createElement("link");
+        themeLink.rel = "stylesheet";
+        themeLink.id = "mava-theme-css";
+        themeLink.href = isDark ? "/assets/mava-dark-theme.css" : "/assets/mava-theme.css";
+        document.head.appendChild(themeLink);
+
+        // Watch for dark class changes on <html> (React toggles this)
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === "attributes" && mutation.attributeName === "class") {
+              const isDarkNow = document.documentElement.classList.contains("dark");
+              const link = document.getElementById("mava-theme-css");
+              if (link) {
+                link.href = isDarkNow ? "/assets/mava-dark-theme.css" : "/assets/mava-theme.css";
+              }
+            }
+          });
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+        // Global theme toggle function
+        window.toggleTheme = function() {
+          const isDarkNow = document.documentElement.classList.contains("dark");
+          if (isDarkNow) {
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("claude-code-webui-theme", JSON.stringify("light"));
+          } else {
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("claude-code-webui-theme", JSON.stringify("dark"));
+          }
+        };
+
+        // Move theme button into header after React mounts
+        function moveThemeButtonToHeader() {
+          const themeBtn = document.getElementById("theme-toggle-btn");
+          if (!themeBtn || themeBtn.dataset.moved === "true") return false;
+
+          // Find the settings button and get its parent container (right side button group)
+          const settingsBtn = document.querySelector('button[aria-label="Open settings"]');
+          if (settingsBtn) {
+            const headerButtons = settingsBtn.parentElement;
+            if (headerButtons) {
+              themeBtn.style.position = "relative";
+              themeBtn.style.top = "auto";
+              themeBtn.style.right = "auto";
+              themeBtn.style.width = "";
+              themeBtn.style.height = "";
+              themeBtn.style.boxShadow = "";
+              themeBtn.className = "p-3 rounded-xl bg-white/80 dark:bg-[#141414]/80 border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-[#141414] transition-all duration-200 backdrop-blur-sm shadow-sm hover:shadow-md flex items-center justify-center";
+              themeBtn.dataset.moved = "true";
+              // Insert at the beginning of the right button group (before history button)
+              headerButtons.insertBefore(themeBtn, headerButtons.firstChild);
+              return true;
+            }
+          }
+          return false;
+        }
+
+        // Try to move button after page loads, with retries for React hydration
+        window.addEventListener("DOMContentLoaded", function() {
+          let attempts = 0;
+          const maxAttempts = 20;
+          const interval = setInterval(function() {
+            if (moveThemeButtonToHeader() || attempts >= maxAttempts) {
+              clearInterval(interval);
+            }
+            attempts++;
+          }, 100);
+        });
+        // Highlight N8N session in history
+        function highlightN8nSession() {
+          document.querySelectorAll('*').forEach(function(el) {
+            if (el.textContent && el.textContent.includes('772b3f87') && el.children.length === 0) {
+              var card = el.closest('[class*="cursor-pointer"]') || el.closest('button');
+              if (card && !card.classList.contains('n8n-highlight')) {
+                card.classList.add('n8n-highlight'); var parent = card.parentElement; if (parent && parent.firstChild !== card) { parent.insertBefore(card, parent.firstChild); }
+              }
+            }
+          });
+        }
+        setInterval(highlightN8nSession, 500);
       })();
     </script>
+    <style>
+      /* Theme toggle button - fallback positioning before React mounts */
+      #theme-toggle-btn:not([data-moved="true"]) {
+        position: fixed;
+        top: 10px;
+        right: 100px;
+        z-index: 9999;
+      }
+
+      /* Sun icon - shown in light mode */
+      #theme-sun-icon {
+        display: block !important;
+      }
+
+      /* Moon icon - shown in dark mode */
+      #theme-moon-icon {
+        display: none !important;
+      }
+
+      html.dark #theme-sun-icon {
+        display: none !important;
+      }
+
+      html.dark #theme-moon-icon {
+        display: block !important;
+      }
+
+      /* Dark mode background for theme button - match other header buttons */
+      html.dark #theme-toggle-btn#theme-toggle-btn[data-moved="true"] {
+        background-color: rgba(30, 41, 59, 0.8) !important;
+      }
+
+      html.dark #theme-toggle-btn#theme-toggle-btn[data-moved="true"]:hover {
+        background-color: rgb(30, 41, 59) !important;
+      }
+    </style>
   </head>
   <body>
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle dark/light theme">
+      <!-- Sun icon (shown in dark mode) -->
+      <svg id="theme-sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-slate-600 dark:text-slate-400">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+      </svg>
+      <!-- Moon icon (shown in light mode) -->
+      <svg id="theme-moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-slate-600 dark:text-slate-400">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+      </svg>
+    </button>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

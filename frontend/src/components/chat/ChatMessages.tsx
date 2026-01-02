@@ -19,7 +19,6 @@ import {
   TodoMessageComponent,
   LoadingComponent,
 } from "../MessageComponents";
-// import { UI_CONSTANTS } from "../../utils/constants"; // Unused for now
 
 interface ChatMessagesProps {
   messages: AllMessage[];
@@ -29,29 +28,45 @@ interface ChatMessagesProps {
 export function ChatMessages({ messages, isLoading }: ChatMessagesProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const prevMessageCountRef = useRef<number>(0);
+  const isInitialLoadRef = useRef<boolean>(true);
 
   // Auto-scroll to bottom
-  const scrollToBottom = () => {
+  const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
     if (messagesEndRef.current && messagesEndRef.current.scrollIntoView) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView({ behavior });
     }
   };
 
-  // Check if user is near bottom of messages (unused but kept for future use)
-  // const isNearBottom = () => {
-  //   const container = messagesContainerRef.current;
-  //   if (!container) return true;
-
-  //   const { scrollTop, scrollHeight, clientHeight } = container;
-  //   return (
-  //     scrollHeight - scrollTop - clientHeight <
-  //     UI_CONSTANTS.NEAR_BOTTOM_THRESHOLD_PX
-  //   );
-  // };
-
-  // Auto-scroll when messages change
+  // Scroll to bottom on initial load
   useEffect(() => {
-    scrollToBottom();
+    if (isInitialLoadRef.current && messages.length > 0) {
+      isInitialLoadRef.current = false;
+      prevMessageCountRef.current = messages.length;
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        scrollToBottom("instant");
+      });
+    }
+  }, [messages.length]);
+
+  // Handle polling updates - scroll to bottom when new messages arrive
+  useEffect(() => {
+    // Skip initial load (handled above)
+    if (isInitialLoadRef.current) return;
+
+    const currentCount = messages.length;
+    const prevCount = prevMessageCountRef.current;
+
+    // Scroll to bottom when new messages are added
+    if (currentCount > prevCount) {
+      // Use requestAnimationFrame for smoother scrolling after DOM update
+      requestAnimationFrame(() => {
+        scrollToBottom("smooth");
+      });
+    }
+
+    prevMessageCountRef.current = currentCount;
   }, [messages]);
 
   const renderMessage = (message: AllMessage, index: number) => {

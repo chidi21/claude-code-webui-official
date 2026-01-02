@@ -13,6 +13,7 @@ import { TimestampComponent } from "./TimestampComponent";
 import { MessageContainer } from "./messages/MessageContainer";
 import { CollapsibleDetails } from "./messages/CollapsibleDetails";
 import { MESSAGE_CONSTANTS } from "../utils/constants";
+import { MarkdownRenderer } from "./MarkdownRenderer";
 import {
   createEditResult,
   createBashPreview,
@@ -42,33 +43,43 @@ interface ChatMessageComponentProps {
 
 export function ChatMessageComponent({ message }: ChatMessageComponentProps) {
   const isUser = message.role === "user";
+  // MAVA-style: transparent backgrounds, styled via CSS classes
   const colorScheme = isUser
-    ? "bg-blue-600 text-white"
-    : "bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-100";
+    ? ""
+    : "";
 
   return (
     <MessageContainer
       alignment={isUser ? "right" : "left"}
       colorScheme={colorScheme}
     >
-      <div className="mb-2 flex items-center justify-between gap-4">
-        <div
-          className={`text-xs font-semibold opacity-90 ${
-            isUser ? "text-blue-100" : "text-slate-600 dark:text-slate-400"
-          }`}
-        >
-          {isUser ? "User" : "Claude"}
+      {isUser ? (
+        // User message - MAVA style with avatar on left, full width
+        <div className="flex gap-3 items-start">
+          <img
+            src="/assets/mava-logo.svg"
+            alt="User"
+            className="w-8 h-8 rounded-full flex-shrink-0 mava-user-avatar"
+          />
+          <div className="flex-1 min-w-0">
+            <MarkdownRenderer
+              content={message.content}
+              className="break-words leading-relaxed"
+            />
+          </div>
         </div>
-        <TimestampComponent
-          timestamp={message.timestamp}
-          className={`text-xs opacity-70 ${
-            isUser ? "text-blue-200" : "text-slate-500 dark:text-slate-500"
-          }`}
-        />
-      </div>
-      <pre className="whitespace-pre-wrap text-sm font-mono leading-relaxed">
-        {message.content}
-      </pre>
+      ) : (
+        // Assistant message - MAVA style with name header
+        <>
+          <div className="text-sm tracking-wider mb-2 mava-accent-text font-medium">
+            Claude
+          </div>
+          <MarkdownRenderer
+            content={message.content}
+            className="break-words leading-relaxed"
+          />
+        </>
+      )}
     </MessageContainer>
   );
 }

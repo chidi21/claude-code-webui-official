@@ -1,3 +1,144 @@
 @import "tailwindcss";
 
 @variant dark (.dark &);
+
+/* ============================================
+   MARKDOWN RENDERER STYLES
+   ============================================ */
+
+/* Markdown content container */
+.markdown-content {
+  line-height: 1.6;
+}
+
+/* Headings */
+.mava-heading-text {
+  color: var(--heading-text, #5d4d42);
+}
+
+.dark .mava-heading-text {
+  color: var(--heading-text, #d4c4b0);
+}
+
+/* Text */
+.mava-text {
+  color: var(--foreground, #1a1a1a);
+}
+
+.dark .mava-text {
+  color: var(--foreground, #e5e5e5);
+}
+
+/* Links */
+.mava-link {
+  color: var(--accent-primary, #8b6d56);
+  text-decoration: underline;
+  text-decoration-color: rgba(139, 109, 86, 0.4);
+  text-underline-offset: 2px;
+}
+
+.dark .mava-link {
+  color: var(--banana-400, #c4a882);
+  text-decoration-color: rgba(196, 168, 130, 0.4);
+}
+
+.mava-link:hover {
+  color: var(--banana-600, #c19d7e);
+}
+
+.dark .mava-link:hover {
+  color: var(--banana-500, #b89b70);
+}
+
+/* Code blocks */
+.mava-code-block {
+  background-color: var(--header-bg, rgb(226 218 200));
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+  color: var(--foreground, #1a1a1a);
+}
+
+.dark .mava-code-block {
+  background-color: var(--card-bg, #1e1e1e);
+  border-color: var(--border-color, rgba(255, 255, 255, 0.12));
+  color: var(--foreground, #e5e5e5);
+}
+
+/* Inline code */
+.mava-inline-code {
+  background-color: var(--header-bg, rgb(226 218 200));
+  color: var(--foreground, #1a1a1a);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+}
+
+.dark .mava-inline-code {
+  background-color: var(--card-bg, #1e1e1e);
+  color: var(--foreground, #e5e5e5);
+  border-color: var(--border-color, rgba(255, 255, 255, 0.12));
+}
+
+/* Blockquotes */
+.mava-blockquote {
+  border-color: var(--banana-400, #e0c4ad);
+  color: var(--muted-text, #4a4a4a);
+  background-color: var(--header-bg, rgb(226 218 200));
+}
+
+.dark .mava-blockquote {
+  border-color: var(--banana-500, #b89b70);
+  color: var(--muted-text, #a3a3a3);
+  background-color: var(--card-bg, #1e1e1e);
+}
+
+/* Horizontal rule */
+.mava-hr {
+  border-color: var(--border-color, rgba(0, 0, 0, 0.15));
+}
+
+.dark .mava-hr {
+  border-color: var(--border-color, rgba(255, 255, 255, 0.12));
+}
+
+/* Tables */
+.mava-table {
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+}
+
+.dark .mava-table {
+  border-color: var(--border-color, rgba(255, 255, 255, 0.12));
+}
+
+.mava-table-head {
+  background-color: var(--header-bg, rgb(226 218 200));
+}
+
+.dark .mava-table-head {
+  background-color: var(--card-bg, #1e1e1e);
+}
+
+.mava-table-row {
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+}
+
+.dark .mava-table-row {
+  border-color: var(--border-color, rgba(255, 255, 255, 0.12));
+}
+
+.mava-table-header {
+  color: var(--foreground, #1a1a1a);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+}
+
+.dark .mava-table-header {
+  color: var(--foreground, #e5e5e5);
+  border-color: var(--border-color, rgba(255, 255, 255, 0.12));
+}
+
+.mava-table-cell {
+  color: var(--muted-text, #4a4a4a);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.15));
+}
+
+.dark .mava-table-cell {
+  color: var(--muted-text, #a3a3a3);
+  border-color: var(--border-color, rgba(255, 255, 255, 0.12));
+}
