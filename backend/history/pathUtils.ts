@@ -32,6 +32,7 @@ export async function getEncodedProjectName(
     // Convert project path to expected encoded format for comparison
     const normalizedPath = projectPath.replace(/\/$/, "");
     // Claude converts '/', '\', ':', '.', and '_' to '-'
+    // Each special character becomes a single dash, so C:\Users becomes C--Users
     const expectedEncoded = normalizedPath.replace(/[/\\:._]/g, "-");
 
     // Find exact match - if not found, return null

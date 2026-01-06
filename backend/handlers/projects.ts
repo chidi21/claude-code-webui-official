@@ -15,10 +15,12 @@ export async function handleProjectsRequest(c: Context) {
   try {
     const homeDir = getHomeDir();
     if (!homeDir) {
+      logger.api.error("Home directory not found");
       return c.json({ error: "Home directory not found" }, 500);
     }
 
     const claudeConfigPath = `${homeDir}/.claude.json`;
+    logger.api.info("Reading claude config from: {path}", { path: claudeConfigPath });
 
     try {
       const configContent = await readTextFile(claudeConfigPath);
@@ -26,11 +28,13 @@ export async function handleProjectsRequest(c: Context) {
 
       if (config.projects && typeof config.projects === "object") {
         const projectPaths = Object.keys(config.projects);
+        logger.api.info("Found {count} projects in config", { count: projectPaths.length });
 
         // Get encoded names for each project, only include projects with history
         const projects: ProjectInfo[] = [];
         for (const path of projectPaths) {
           const encodedName = await getEncodedProjectName(path);
+          logger.api.info("Project {path} -> {encoded}", { path, encoded: encodedName || "null" });
           // Only include projects that have history directories
           if (encodedName) {
             projects.push({
@@ -40,15 +44,18 @@ export async function handleProjectsRequest(c: Context) {
           }
         }
 
+        logger.api.info("Returning {count} projects with history", { count: projects.length });
         const response: ProjectsResponse = { projects };
         return c.json(response);
       } else {
+        logger.api.info("No projects object in config");
         const response: ProjectsResponse = { projects: [] };
         return c.json(response);
       }
     } catch (error) {
       // Handle file not found errors in a cross-platform way
-      if (error instanceof Error && error.message.includes("No such file")) {
+      if (error instanceof Error && (error.message.includes("No such file") || (error as NodeJS.ErrnoException).code === "ENOENT")) {
+        logger.api.info("Claude config file not found");
         const response: ProjectsResponse = { projects: [] };
         return c.json(response);
       }
