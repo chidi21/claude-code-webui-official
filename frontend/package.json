@@ -21,6 +21,7 @@
     "capture-screenshots": "npx tsx scripts/capture-screenshots.ts"
   },
   "dependencies": {
+    "@esbuild/win32-x64": "^0.27.2",
     "@heroicons/react": "^2.2.0",
     "@rollup/rollup-win32-x64-msvc": "^4.54.0",
     "@swc/core-win32-x64-msvc": "^1.15.8",

@@ -39,6 +39,7 @@
   "scripts": {
     "predev": "node scripts/generate-version.js",
     "dev": "tsx watch cli/node.ts --debug",
+    "dev:8085": "tsx watch cli/node.ts --debug --port 8085",
     "prebuild": "node scripts/generate-version.js",
     "build": "npm run build:clean && npm run build:bundle && npm run build:static",
     "build:clean": "rimraf dist",

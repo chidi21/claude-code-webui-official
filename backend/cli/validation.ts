@@ -60,8 +60,10 @@ async function parseCmdScript(cmdPath: string): Promise<string | null> {
         logger.cli.debug(`Could not extract relative path from: ${fullPath}`);
       }
     } else {
-      logger.cli.debug(`No typical NPM CLI script execution pattern found in .cmd content`);
-      
+      logger.cli.debug(
+        `No typical NPM CLI script execution pattern found in .cmd content`,
+      );
+
       // Fallback for Deno-style wrappers: @deno run -A npm:@anthropic-ai/claude-code@1.0.108/claude %*
       const denoMatch = cmdContent.match(/deno\s+run\s+[^%]*?(npm:[^%\s]+)/);
       if (denoMatch) {
@@ -328,9 +330,13 @@ export async function validateClaudeCli(
 
     if (detection.scriptPath) {
       // Don't resolve/normalize if it's a Deno specifier (starts with npm: or jsr:)
-      const isSpecifier = detection.scriptPath.startsWith("npm:") || detection.scriptPath.startsWith("jsr:");
-      const normalizedPath = isSpecifier ? detection.scriptPath : normalize(resolve(detection.scriptPath));
-      
+      const isSpecifier =
+        detection.scriptPath.startsWith("npm:") ||
+        detection.scriptPath.startsWith("jsr:");
+      const normalizedPath = isSpecifier
+        ? detection.scriptPath
+        : normalize(resolve(detection.scriptPath));
+
       logger.cli.info(`✅ Claude CLI script detected: ${normalizedPath}`);
       if (detection.versionOutput) {
         logger.cli.info(`✅ Claude CLI found: ${detection.versionOutput}`);

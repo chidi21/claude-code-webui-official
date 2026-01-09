@@ -6,7 +6,9 @@
 
 import { program } from "commander";
 import { VERSION } from "./version.ts";
-import { getEnv, getArgs } from "../utils/os.ts";
+import { getEnv, getArgs, readTextFile } from "../utils/os.ts";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 export interface ParsedArgs {
   debug: boolean;
@@ -15,12 +17,33 @@ export interface ParsedArgs {
   claudePath?: string;
 }
 
-export function parseCliArgs(): ParsedArgs {
+export async function parseCliArgs(): Promise<ParsedArgs> {
   // Use version from auto-generated version.ts file
   const version = VERSION;
 
-  // Get default port from environment
-  const defaultPort = parseInt(getEnv("PORT") || "8081", 10);
+  // Get default port from environment or root .env file
+  let envPort = getEnv("PORT");
+
+  if (!envPort) {
+    try {
+      // Look for .env in the root directory (parent of backend)
+      const __dirname =
+        import.meta.dirname ?? dirname(fileURLToPath(import.meta.url));
+      const envPath = join(__dirname, "../../.env");
+      const envContent = await readTextFile(envPath);
+
+      if (envContent) {
+        const match = envContent.match(/^PORT=(\d+)/m);
+        if (match) {
+          envPort = match[1];
+        }
+      }
+    } catch {
+      // Ignore errors if .env doesn't exist or can't be read
+    }
+  }
+
+  const defaultPort = parseInt(envPort || "8081", 10);
 
   // Configure program
   program

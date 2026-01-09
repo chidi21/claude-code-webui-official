@@ -1,6 +1,6 @@
 import { Context } from "hono";
 import { query, type PermissionMode } from "@anthropic-ai/claude-code";
-import { resolve, normalize } from "node:path";
+import { normalize } from "node:path";
 import type { ChatRequest, StreamResponse } from "../../shared/types.ts";
 import { logger } from "../utils/logger.ts";
 
@@ -55,7 +55,9 @@ async function* executeClaudeCommand(
     }
 
     // Determine executable (node or deno)
-    const isDenoSpecifier = normalizedCliPath.startsWith("npm:") || normalizedCliPath.startsWith("jsr:");
+    const isDenoSpecifier =
+      normalizedCliPath.startsWith("npm:") ||
+      normalizedCliPath.startsWith("jsr:");
     const executable = isDenoSpecifier ? ("deno" as const) : ("node" as const);
 
     for await (const sdkMessage of query({
@@ -67,7 +69,9 @@ async function* executeClaudeCommand(
         pathToClaudeCodeExecutable: normalizedCliPath,
         ...(sessionId ? { resume: sessionId } : {}),
         ...(allowedTools ? { allowedTools } : {}),
-        ...(normalizedWorkingDirectory ? { cwd: normalizedWorkingDirectory } : {}),
+        ...(normalizedWorkingDirectory
+          ? { cwd: normalizedWorkingDirectory }
+          : {}),
         ...(permissionMode ? { permissionMode } : {}),
       },
     })) {

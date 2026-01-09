@@ -7,12 +7,27 @@
 
 import { homedir } from "node:os";
 import process from "node:process";
+import { readFileSync } from "node:fs";
 
 /**
  * Get environment variable
  */
 export function getEnv(key: string): string | undefined {
   return process.env[key];
+}
+
+/**
+ * Read text file content
+ */
+export async function readTextFile(path: string): Promise<string | undefined> {
+  try {
+    // In Node.js, we can use readFileSync for simplicity or fs/promises
+    // To keep it runtime-agnostic and simple, we'll use synchronous read for now
+    // as it's during startup.
+    return readFileSync(path, "utf-8");
+  } catch {
+    return undefined;
+  }
 }
 
 /**

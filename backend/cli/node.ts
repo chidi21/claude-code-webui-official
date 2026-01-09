@@ -17,7 +17,7 @@ import { exit } from "../utils/os.ts";
 
 async function main(runtime: NodeRuntime) {
   // Parse CLI arguments
-  const args = parseCliArgs();
+  const args = await parseCliArgs();
 
   // Initialize logging system
   await setupLogger(args.debug);

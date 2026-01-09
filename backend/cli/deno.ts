@@ -15,7 +15,7 @@ import { exit } from "../utils/os.ts";
 
 async function main(runtime: DenoRuntime) {
   // Parse CLI arguments
-  const args = parseCliArgs();
+  const args = await parseCliArgs();
 
   // Initialize logging system
   await setupLogger(args.debug);
