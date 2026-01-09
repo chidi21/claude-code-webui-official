@@ -1,5 +1,6 @@
 import { Context } from "hono";
 import { query, type PermissionMode } from "@anthropic-ai/claude-code";
+import { resolve, normalize } from "node:path";
 import type { ChatRequest, StreamResponse } from "../../shared/types.ts";
 import { logger } from "../utils/logger.ts";
 
@@ -39,16 +40,34 @@ async function* executeClaudeCommand(
     abortController = new AbortController();
     requestAbortControllers.set(requestId, abortController);
 
+    // Normalize paths for Windows compatibility
+    const normalizedCliPath = cliPath ? normalize(cliPath) : "";
+    const normalizedWorkingDirectory = workingDirectory
+      ? normalize(workingDirectory)
+      : undefined;
+
+    logger.chat.debug(
+      `Executing Claude CLI with normalized paths: cliPath=${normalizedCliPath}, workingDirectory=${normalizedWorkingDirectory}`,
+    );
+
+    if (!normalizedCliPath) {
+      throw new Error("Claude CLI path is invalid or not detected");
+    }
+
+    // Determine executable (node or deno)
+    const isDenoSpecifier = normalizedCliPath.startsWith("npm:") || normalizedCliPath.startsWith("jsr:");
+    const executable = isDenoSpecifier ? ("deno" as const) : ("node" as const);
+
     for await (const sdkMessage of query({
       prompt: processedMessage,
       options: {
         abortController,
-        executable: "node" as const,
+        executable,
         executableArgs: [],
-        pathToClaudeCodeExecutable: cliPath,
+        pathToClaudeCodeExecutable: normalizedCliPath,
         ...(sessionId ? { resume: sessionId } : {}),
         ...(allowedTools ? { allowedTools } : {}),
-        ...(workingDirectory ? { cwd: workingDirectory } : {}),
+        ...(normalizedWorkingDirectory ? { cwd: normalizedWorkingDirectory } : {}),
         ...(permissionMode ? { permissionMode } : {}),
       },
     })) {

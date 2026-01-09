@@ -26,7 +26,7 @@ lefthook run pre-commit
 
 ### Backend (Deno/Node.js)
 
-- **Location**: `backend/` | **Port**: 8080 (configurable)
+- **Location**: `backend/` | **Port**: 8081 (configurable)
 - **Technology**: TypeScript + Hono framework with runtime abstraction
 - **Purpose**: Executes `claude` commands and streams JSON responses
 
@@ -141,7 +141,7 @@ cd frontend
 npm run dev
 ```
 
-**Access**: Frontend http://localhost:3000, Backend http://localhost:8080
+**Access**: Frontend http://localhost:3000, Backend http://localhost:8081
 
 ### Project Structure
 

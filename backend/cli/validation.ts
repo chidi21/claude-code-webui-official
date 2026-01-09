@@ -4,7 +4,7 @@
  * Common validation functions used across different runtime CLI entry points.
  */
 
-import { dirname, join } from "node:path";
+import { dirname, join, resolve, normalize } from "node:path";
 import type { Runtime } from "../runtime/types.ts";
 import { logger } from "../utils/logger.ts";
 import {
@@ -50,8 +50,9 @@ async function parseCmdScript(cmdPath: string): Promise<string | null> {
 
         // Verify the resolved path exists
         if (await exists(absolutePath)) {
-          logger.cli.debug(`.cmd parsing successful: ${absolutePath}`);
-          return absolutePath;
+          const normalizedPath = normalize(resolve(absolutePath));
+          logger.cli.debug(`.cmd parsing successful: ${normalizedPath}`);
+          return normalizedPath;
         } else {
           logger.cli.debug(`Resolved path does not exist: ${absolutePath}`);
         }
@@ -59,7 +60,16 @@ async function parseCmdScript(cmdPath: string): Promise<string | null> {
         logger.cli.debug(`Could not extract relative path from: ${fullPath}`);
       }
     } else {
-      logger.cli.debug(`No CLI script execution pattern found in .cmd content`);
+      logger.cli.debug(`No typical NPM CLI script execution pattern found in .cmd content`);
+      
+      // Fallback for Deno-style wrappers: @deno run -A npm:@anthropic-ai/claude-code@1.0.108/claude %*
+      const denoMatch = cmdContent.match(/deno\s+run\s+[^%]*?(npm:[^%\s]+)/);
+      if (denoMatch) {
+        const denoSpecifier = denoMatch[1];
+        logger.cli.debug(`Found Deno specifier in .cmd: ${denoSpecifier}`);
+        // We'll return this specifier, but it might need special handling as it's not a local file
+        return denoSpecifier;
+      }
     }
 
     return null;
@@ -187,7 +197,8 @@ export async function detectClaudeCliPath(
         }
 
         if (scriptPath) {
-          return { scriptPath, versionOutput };
+          const normalizedPath = normalize(resolve(scriptPath));
+          return { scriptPath: normalizedPath, versionOutput };
         }
       }
 
@@ -316,11 +327,15 @@ export async function validateClaudeCli(
     const detection = await detectClaudeCliPath(runtime, claudePath);
 
     if (detection.scriptPath) {
-      logger.cli.info(`✅ Claude CLI script detected: ${detection.scriptPath}`);
+      // Don't resolve/normalize if it's a Deno specifier (starts with npm: or jsr:)
+      const isSpecifier = detection.scriptPath.startsWith("npm:") || detection.scriptPath.startsWith("jsr:");
+      const normalizedPath = isSpecifier ? detection.scriptPath : normalize(resolve(detection.scriptPath));
+      
+      logger.cli.info(`✅ Claude CLI script detected: ${normalizedPath}`);
       if (detection.versionOutput) {
         logger.cli.info(`✅ Claude CLI found: ${detection.versionOutput}`);
       }
-      return detection.scriptPath;
+      return normalizedPath;
     } else {
       // Show warning but continue with fallback when detection fails
       logger.cli.warn("⚠️  Claude CLI script path detection failed");
@@ -329,11 +344,12 @@ export async function validateClaudeCli(
       );
       logger.cli.warn("   This may not work properly, but continuing anyway.");
       logger.cli.warn("");
-      logger.cli.warn(`   Using fallback path: ${claudePath}`);
+      const normalizedFallbackPath = normalize(resolve(claudePath));
+      logger.cli.warn(`   Using fallback path: ${normalizedFallbackPath}`);
       if (detection.versionOutput) {
         logger.cli.info(`✅ Claude CLI found: ${detection.versionOutput}`);
       }
-      return claudePath;
+      return normalizedFallbackPath;
     }
   } catch (error) {
     logger.cli.error("❌ Failed to validate Claude CLI");

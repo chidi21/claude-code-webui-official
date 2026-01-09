@@ -14,6 +14,11 @@ export function HistoryView({ encodedName }: HistoryViewProps) {
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hideAgentSessions, setHideAgentSessions] = useState(false);
+
+  const filteredConversations = hideAgentSessions
+    ? conversations.filter((c) => !c.sessionId.startsWith("agent"))
+    : conversations;
 
   useEffect(() => {
     const loadConversations = async () => {
@@ -127,8 +132,38 @@ export function HistoryView({ encodedName }: HistoryViewProps) {
   return (
     <div className="flex-1 overflow-hidden">
       <div className="p-6 h-full flex flex-col">
+        <div className="flex items-center gap-2 mb-4">
+          <input
+            type="checkbox"
+            id="agent-filter"
+            checked={hideAgentSessions}
+            onChange={(e) => setHideAgentSessions(e.target.checked)}
+            className="w-4 h-4 rounded border-slate-300 dark:border-slate-600"
+          />
+          <label
+            htmlFor="agent-filter"
+            className="text-sm text-slate-600 dark:text-slate-400"
+          >
+            Hide agent sessions
+          </label>
+        </div>
+        {filteredConversations.length === 0 && hideAgentSessions ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">
+                No non-agent sessions found
+              </p>
+              <button
+                onClick={() => setHideAgentSessions(false)}
+                className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+              >
+                Clear filter
+              </button>
+            </div>
+          </div>
+        ) : (
         <div className="grid gap-4 flex-1 overflow-y-auto">
-          {conversations.map((conversation) => (
+          {filteredConversations.map((conversation) => (
             <div
               key={conversation.sessionId}
               onClick={() => handleConversationSelect(conversation.sessionId)}
@@ -166,6 +201,7 @@ export function HistoryView({ encodedName }: HistoryViewProps) {
             </div>
           ))}
         </div>
+        )}
       </div>
     </div>
   );
