@@ -21,10 +21,11 @@ export async function parseCliArgs(): Promise<ParsedArgs> {
   // Use version from auto-generated version.ts file
   const version = VERSION;
 
-  // Get default port from environment or root .env file
+  // Get default port and claude path from environment or root .env file
   let envPort = getEnv("PORT");
+  let envClaudePath = getEnv("CLAUDE_PATH");
 
-  if (!envPort) {
+  if (!envPort || !envClaudePath) {
     try {
       // Look for .env in the root directory (parent of backend)
       const __dirname =
@@ -33,9 +34,17 @@ export async function parseCliArgs(): Promise<ParsedArgs> {
       const envContent = await readTextFile(envPath);
 
       if (envContent) {
-        const match = envContent.match(/^PORT=(\d+)/m);
-        if (match) {
-          envPort = match[1];
+        if (!envPort) {
+          const portMatch = envContent.match(/^PORT=(\d+)/m);
+          if (portMatch) {
+            envPort = portMatch[1];
+          }
+        }
+        if (!envClaudePath) {
+          const claudePathMatch = envContent.match(/^CLAUDE_PATH=(.+)$/m);
+          if (claudePathMatch) {
+            envClaudePath = claudePathMatch[1].trim();
+          }
         }
       }
     } catch {
@@ -85,6 +94,6 @@ export async function parseCliArgs(): Promise<ParsedArgs> {
     debug: options.debug || debugFromEnv,
     port: options.port,
     host: options.host,
-    claudePath: options.claudePath,
+    claudePath: options.claudePath || envClaudePath,
   };
 }
